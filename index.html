@@ -209,13 +209,25 @@ a{color:inherit;text-decoration:none;}
 
 /* ── MOBILE HAMBURGER ── */
 .mob-menu-btn{
-  display:none;align-items:center;justify-content:center;
-  width:40px;height:40px;background:none;border:none;cursor:pointer;
-  flex-shrink:0;
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  width:56px;height:52px;background:none;border:none;border-right:1px solid var(--rule);
+  cursor:pointer;flex-shrink:0;padding:0;
 }
-.mob-menu-btn span{display:block;width:20px;height:2px;background:var(--ink);margin:4px 0;transition:all 0.25s;}
+.mob-bars{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.mob-menu-btn .bar{
+  display:block;width:18px;height:2px;background:var(--ink);
+  border-radius:1px;transition:transform 0.25s, opacity 0.2s;
+  transform-origin:center;
+}
+.mob-menu-label{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--ink);letter-spacing:0.07em;text-transform:uppercase;line-height:1;}
+.mob-menu-btn.open .mob-bars .bar:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.mob-menu-btn.open .mob-bars .bar:nth-child(2){opacity:0;}
+.mob-menu-btn.open .mob-bars .bar:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mob-menu-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.mob-menu-btn.open span:nth-child(2){opacity:0;}
+.mob-menu-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
 .mob-overlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:150;
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;
 }
 .mob-overlay.open{display:block;}
 
@@ -223,11 +235,11 @@ a{color:inherit;text-decoration:none;}
 @media(max-width:680px){
 
   /* Topbar */
-  .topbar{padding:0 8px 0 0;height:52px;}
-  .tb-brand{width:auto;border-right:none;padding:0 0 0 12px;font-size:12px;}
+  .topbar{padding:0 12px 0 0;height:52px;}
+  .tb-brand{width:auto;border-right:none;padding:0 0 0 8px;font-size:13px;}
   .tb-date{display:none;}
-  .tb-li span:last-child{display:none;}/* hide "LinkedIn" text, keep icon */
-  .tb-li{padding:5px 8px;}
+  .tb-li span:last-child{display:none;}
+  .tb-li{padding:5px 10px;}
   .mob-menu-btn{display:flex;}
 
   /* Sidebar — slide in from left */
@@ -284,6 +296,10 @@ a{color:inherit;text-decoration:none;}
 <body>
 
 <nav class="topbar">
+  <button class="mob-menu-btn" id="mob-menu-btn" onclick="toggleNav()" aria-label="Menu">
+    <div class="mob-bars"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+    <span class="mob-menu-label">Menu</span>
+  </button>
   <div class="tb-brand">
     <div class="tb-hex"></div>
     Shabih Syed · PMM
@@ -294,9 +310,6 @@ a{color:inherit;text-decoration:none;}
       LinkedIn
     </a>
     <span class="tb-date">Portfolio · 2025–2026</span>
-    <button class="mob-menu-btn" onclick="toggleNav()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 </nav>
 
@@ -1274,10 +1287,12 @@ a{color:inherit;text-decoration:none;}
 function toggleNav() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('mob-overlay').classList.toggle('open');
+  document.getElementById('mob-menu-btn').classList.toggle('open');
 }
 function closeNav() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('mob-overlay').classList.remove('open');
+  document.getElementById('mob-menu-btn').classList.remove('open');
 }
 
 function nav(id, tab) {
